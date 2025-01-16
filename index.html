@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GuCapcha</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    .images {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    .images img {
+      width: 150px;
+      height: 150px;
+      cursor: pointer;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .images img:hover {
+      transform: scale(1.05);
+      border-color: #666;
+    }
+    .message {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #333;
+    }
+    .success {
+      color: green;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>GuCapcha: Найди Гулю!</h1>
+  <p>Выбери изображение, где изображена Гуля:</p>
+  <div class="images" id="image-container">
+    <!-- Изображения будут загружены сюда -->
+  </div>
+  <div class="message" id="message"></div>
+
+  <script>
+    // Ссылки на изображения
+    const imagesWithoutGulya = [
+      "https://photos.app.goo.gl/DCkyzxJtVwQEQfoPA",
+      "https://photos.app.goo.gl/69BgTFrwLeKfxMUGA",
+      "https://photos.app.goo.gl/jwyjS5U2NJsdNsyb6",
+      "https://photos.app.goo.gl/k6MXv4migWqP6snm8"
+    ];
+    const imagesWithGulya = [
+      "https://photos.app.goo.gl/NVKgLPWvL3PvTTsY8"
+    ];
+
+    // Функция для перемешивания массива
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    // Создаём массив изображений и перемешиваем его
+    const allImages = [...imagesWithoutGulya, ...imagesWithGulya];
+    const shuffledImages = shuffleArray(allImages);
+
+    // Добавляем изображения на страницу
+    const imageContainer = document.getElementById('image-container');
+    shuffledImages.forEach((imageUrl, index) => {
+      const img = document.createElement('img');
+      img.src = imageUrl;
+      img.alt = `Изображение ${index + 1}`;
+      img.onclick = () => checkAnswer(imageUrl);
+      imageContainer.appendChild(img);
+    });
+
+    // Проверка выбора пользователя
+    function checkAnswer(selectedImageUrl) {
+      const message = document.getElementById('message');
+      if (imagesWithGulya.includes(selectedImageUrl)) {
+        message.textContent = "Правильно! Гуля довольна! 🐾";
+        message.className = "message success";
+      } else {
+        message.textContent = "Ой, это не Гуля! Попробуй ещё раз!";
+        message.className = "message error";
+      }
+    }
+  </script>
+</body>
+</html>
